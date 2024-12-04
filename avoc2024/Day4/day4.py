@@ -93,16 +93,16 @@ def checkCross(ag, row, col, height, width):
     tr = (row-1,col+1)
     bl = (row+1,col-1)
     if allValidCoordinates(tl,br,tr,bl, height,width):
-        if (ag[tl[0]][tl[1]]=='M' and ag[tr[0]][tl[1]]=='S' and ag[bl[0]][tl[1]]=='M' and ag[br[0]][br[1]]=='S'):
+        if (ag[tl[0]][tl[1]]=="M" and ag[tr[0]][tr[1]]=="S" and ag[bl[0]][bl[1]]=="M" and ag[br[0]][br[1]]=="S"):
             print(tl, tr,row,col, bl, br)
             return True
-        elif (ag[tl[0]][tl[1]]=='S' and ag[tr[0]][tl[1]]=='S' and ag[bl[0]][tl[1]]=='M' and ag[br[0]][br[1]]=='M'):
+        elif (ag[tl[0]][tl[1]]=="S" and ag[tr[0]][tr[1]]=="S" and ag[bl[0]][bl[1]]=="M" and ag[br[0]][br[1]]=="M"):
             print(tl, tr,  row,col, bl, br)
             return True
-        elif (ag[tl[0]][tl[1]]=='M' and ag[tr[0]][tl[1]]=='M' and ag[bl[0]][tl[1]]=='S' and ag[br[0]][br[1]]=='S'):
+        elif (ag[tl[0]][tl[1]]=="M" and ag[tr[0]][tr[1]]=="M" and ag[bl[0]][bl[1]]=="S" and ag[br[0]][br[1]]=="S"):
             print(tl, tr,  row,col, bl, br)
             return True
-        elif (ag[tl[0]][tl[1]]=='S' and ag[tr[0]][tl[1]]=='M' and ag[bl[0]][tl[1]]=='S' and ag[br[0]][br[1]]=='M'):
+        elif (ag[tl[0]][tl[1]]=="S" and ag[tr[0]][tr[1]]=="M" and ag[bl[0]][bl[1]]=="S" and ag[br[0]][br[1]]=="M"):
             print(tl, tr,  row,col, bl, br)
             return True
         else:
@@ -111,7 +111,7 @@ def checkCross(ag, row, col, height, width):
 def checkForCenterCross(arraygrid, row, col):
     height = len(arraygrid)
     width = len(arraygrid[0])
-    if arraygrid[row][col] == 'A':
+    if arraygrid[row][col] == "A":
         print('A')
         if checkCross(arraygrid, row, col, height, width):
             return 1
@@ -152,4 +152,4 @@ def part_two(input):
 
 
 
-# part_two(None)
+part_two(None)

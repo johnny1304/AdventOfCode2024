@@ -8,7 +8,7 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(part_one("day4/resources/testInput.txt"), 18)
 
     def test_something2(self):
-        self.assertEqual(part_two("day4/resources/testInput.txt"), 18)
+        self.assertEqual(part_two("day4/resources/testInput.txt"), 9)
     # add assertion here
 
 
