@@ -76,7 +76,14 @@ def part_one(input):
 
 
 def allValidCoordinates(tl, br, tr, bl, height, width):
-    if tl[0]>=0 and tl[0]<height and tl[1]>=0 and tl[1]<width and br[0]>=0 and br[0]<height and br[1]>=0 and br[1]<width and tr[0]>=0 and tr[0]<height and tr[1]>=0 and tr[1]<width and bl[0]>=0 and bl[0]<height and bl[1]>=0 and bl[1]<width:
+    if (0 <= tl[0] < height and
+            0 <= tl[1] < width and
+            0 <= br[0] < height and
+            0 <= br[1] < width and
+            0 <= tr[0] < height and
+            0 <= tr[1] < width  and
+            0 <= bl[0] < height and
+            0 <= bl[1] < width):
         return True
 
 
@@ -86,14 +93,17 @@ def checkCross(ag, row, col, height, width):
     tr = (row-1,col+1)
     bl = (row+1,col-1)
     if allValidCoordinates(tl,br,tr,bl, height,width):
-        print(tl,tr,bl,br)
         if (ag[tl[0]][tl[1]]=='M' and ag[tr[0]][tl[1]]=='S' and ag[bl[0]][tl[1]]=='M' and ag[br[0]][br[1]]=='S'):
+            print(tl, tr,row,col, bl, br)
             return True
         elif (ag[tl[0]][tl[1]]=='S' and ag[tr[0]][tl[1]]=='S' and ag[bl[0]][tl[1]]=='M' and ag[br[0]][br[1]]=='M'):
+            print(tl, tr,  row,col, bl, br)
             return True
         elif (ag[tl[0]][tl[1]]=='M' and ag[tr[0]][tl[1]]=='M' and ag[bl[0]][tl[1]]=='S' and ag[br[0]][br[1]]=='S'):
+            print(tl, tr,  row,col, bl, br)
             return True
         elif (ag[tl[0]][tl[1]]=='S' and ag[tr[0]][tl[1]]=='M' and ag[bl[0]][tl[1]]=='S' and ag[br[0]][br[1]]=='M'):
+            print(tl, tr,  row,col, bl, br)
             return True
         else:
             return False
@@ -102,6 +112,7 @@ def checkForCenterCross(arraygrid, row, col):
     height = len(arraygrid)
     width = len(arraygrid[0])
     if arraygrid[row][col] == 'A':
+        print('A')
         if checkCross(arraygrid, row, col, height, width):
             return 1
     return 0
@@ -117,7 +128,7 @@ def findCrosses(arraygrid):
 def creategrid(df):
     arraygrid = []
     rows, cols = df.shape
-    for row in range(rows-1):
+    for row in range(rows):
         arraygrid.append(df.iloc[row].values.flatten().tolist())
     return arraygrid
 
