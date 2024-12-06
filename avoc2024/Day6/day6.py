@@ -1,3 +1,5 @@
+import copy
+
 import pandas as pd
 
 def creategrid(df):
@@ -9,8 +11,8 @@ def creategrid(df):
 
 
 def isObstacle(nextSquare, arraygrid):
-    print(nextSquare)
-    print(arraygrid[nextSquare[0]][nextSquare[1]])
+    # print(nextSquare)
+    # print(arraygrid[nextSquare[0]][nextSquare[1]])
     return arraygrid[nextSquare[0]][nextSquare[1]] == "#"
 
 
@@ -96,33 +98,31 @@ def calculateLoopsSquares(arraygrid, soldierPos):
     direction = 1
     pathsquares = set()
     while isValidCoordinate(height, soldierPos, width):
-        print("soldier" + str(soldierPos))
-        print(direction)
-        pathsquares.add((soldierPos[0], soldierPos[1]))
+        # print("soldier" + str(soldierPos))
+        # print(direction)
+        if pathsquares.__contains__((soldierPos[0], soldierPos[1], direction)):
+            return True
+        pathsquares.add((soldierPos[0], soldierPos[1], direction))
         if direction == 1:
             nextSquare = (soldierPos[0] - 1, soldierPos[1])
-            checkLoop(soldierPos,nextSquare, pathsquares)
             if isValidCoordinate(height, nextSquare, width) and isObstacle(nextSquare, arraygrid):
                 direction = changeDirection(direction)
             else:
                 soldierPos = (soldierPos[0] - 1, soldierPos[1])
         elif direction == 2:
             nextSquare = (soldierPos[0], soldierPos[1] + 1)
-            checkLoop(soldierPos,nextSquare, pathsquares)
             if isValidCoordinate(height, nextSquare, width) and isObstacle(nextSquare, arraygrid):
                 direction = changeDirection(direction)
             else:
                 soldierPos = (soldierPos[0], soldierPos[1] + 1)
         elif direction == 3:
             nextSquare = (soldierPos[0] + 1, soldierPos[1])
-            checkLoop(soldierPos,nextSquare, pathsquares)
             if isValidCoordinate(height, nextSquare, width) and isObstacle(nextSquare, arraygrid):
                 direction = changeDirection(direction)
             else:
                 soldierPos = (soldierPos[0] + 1, soldierPos[1])
         elif direction == 4:
             nextSquare = (soldierPos[0], soldierPos[1] - 1)
-            checkLoop(soldierPos,nextSquare, pathsquares)
             if isValidCoordinate(height, nextSquare, width) and isObstacle(nextSquare, arraygrid):
                 direction = changeDirection(direction)
             else:
@@ -152,7 +152,7 @@ def part_two(input):
 
     for r in range(row):
         for c in range(col):
-            arraygridEdited = arraygrid.copy()
+            arraygridEdited = copy.deepcopy(arraygrid)
             arraygridEdited[r][c] = '#'
             if calculateLoopsSquares(arraygridEdited,soldierPos):
                 total+=1
