@@ -1,5 +1,7 @@
 from collections import Counter
 
+from Cython.Utils import OrderedSet
+
 
 def creategrid(df):
     arraygrid = []
@@ -84,25 +86,78 @@ def getSides(startpoint, nextSteps):
     return sides
 
 
+def calulateSidesFromEdges(edges):
+
+    bottomEdges = list(OrderedSet(edges.get("b",[])))
+    topEdges = list(OrderedSet(edges.get("t",[])))
+    rightEdges = list(OrderedSet(edges.get("r",[])))
+    leftEdges = list(OrderedSet(edges.get("l",[])))
+    bCount = 0
+    tCount = 0
+    rCount = 0
+    lCount = 0
+
+    for node in bottomEdges:
+
+        if (node[0],node[1]+1) not in bottomEdges:
+
+            bCount+=1
+
+
+    for node in topEdges:
+
+        if (node[0],node[1]+1) not in topEdges:
+            tCount += 1
+
+    for node in rightEdges:
+        if (node[0]+1,node[1]) not in rightEdges:
+            rCount += 1
+
+    for node in leftEdges:
+        if (node[0]+1,node[1]) not in leftEdges:
+            lCount += 1
+
+
+    return bCount+tCount+rCount+lCount
+
+
+
+
+
+
 def getAreaAndPerimBasedSide (startpoint, visited, perims, areas, inputlines,):
     nextSteps = getNextSteps(startpoint, inputlines)
     sides = dict()
+    edges = dict()
+    if len(nextSteps) == 0:
+        edges['b'] = [startpoint]
+        edges['t'] = [startpoint]
+        edges['l'] = [startpoint]
+        edges['r'] = [startpoint]
     for i in nextSteps:
         sides[i] = getSides(startpoint, nextSteps)
+        for d in sides[i]:
+            if d not in edges:
+                edges[d] = [startpoint]
+            else:
+                edges.get(d).append(startpoint)
+
+
     perims[inputlines[startpoint[0]][startpoint[1]] + str(startpoint)] = perims.get(
             inputlines[startpoint[0]][startpoint[1]] + str(startpoint), 0) +  4- len(sides)
-    print(startpoint, "start vallue", 4 - len(sides))
+
     totalArea = 1
-    if len(nextSteps) == 0:
-        perims[inputlines[startpoint[0]][startpoint[1]] + str(startpoint)] = 4
-        totalArea += 1
     visited.add(startpoint)
-    totalArea = loopsides(inputlines, nextSteps, perims, sides, startpoint, totalArea, visited)
-    print(totalArea)
+
+    totalArea = loopsides(inputlines, nextSteps, perims, sides, startpoint, totalArea, visited, edges)
+
+
+    totalSides = calulateSidesFromEdges(edges)
+    perims[inputlines[startpoint[0]][startpoint[1]] + str(startpoint)] = totalSides
     areas[inputlines[startpoint[0]][startpoint[1]]+str(startpoint)] = totalArea
 
 
-def loopsides(inputlines, nextSteps, perims, sides, startpoint, totalArea, visited):
+def loopsides(inputlines, nextSteps, perims, sides, startpoint, totalArea, visited, edges):
     while len(nextSteps) > 0:
         secondHopSteps = []
         for nextStep in nextSteps:
@@ -112,7 +167,12 @@ def loopsides(inputlines, nextSteps, perims, sides, startpoint, totalArea, visit
                 newNextStep = getNextSteps(nextStep, inputlines)
                 nextSides = getSides(nextStep, newNextStep)
                 diff = nextSides.difference(sides[nextStep])
-                print("step ",nextStep, "diff", diff )
+
+                for d in nextSides:
+                    if d not in edges:
+                        edges[d] = [nextStep]
+                    else:
+                        edges.get(d).append(nextStep)
                 for d in diff:
                     if d in nextSides:
                         perims[inputlines[nextStep[0]][nextStep[1]] + str(startpoint)] = perims.get(
@@ -148,8 +208,9 @@ def part_two(input):
         totalCost = 0
         for key in areas.keys():
             totalCost += areas[key] * perims[key]
-    print(perims)
+
+
     print("answer:" + str(totalCost))
     return totalCost
 
-# part_two(None)
+part_two(None)
