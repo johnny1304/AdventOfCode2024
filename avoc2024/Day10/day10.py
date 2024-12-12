@@ -32,10 +32,7 @@ def calcualteNextSteps(startpoint, inputlines):
     nextSteps = []
     for step in possibleSteps:
         if validStep(inputlines, step):
-            # print("test STEP: ",str(inputlines[step[0]][step[1]]))
-            # print("test STEP loc: ", str(step[1]),str(step[1]))
             if (inputlines[step[0]][step[1]] - inputlines[startpoint[0]][startpoint[1]]) == 1:
-                # print("Success")
                 nextSteps.append(step)
     return nextSteps
 
