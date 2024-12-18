@@ -1,6 +1,6 @@
 import unittest
 
-from avoc2024.Day15.Day15 import part_one
+from avoc2024.Day15.Day15pt1 import part_one
 
 
 class MyTestCase(unittest.TestCase):

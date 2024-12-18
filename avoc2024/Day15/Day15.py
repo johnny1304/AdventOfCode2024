@@ -1,6 +1,8 @@
 import copy
 
 
+
+
 def part_one(input, moveInput):
     if input is None:
         input = 'resources/input.txt'
@@ -8,20 +10,25 @@ def part_one(input, moveInput):
     width = 0
     height = 0
     walls = []
-    boxes = []
+    boxes = {}
+    total = 0
     with open(input, 'r') as file:
         lines = file.readlines()
         for line in range(len(lines)):
             height = len(lines)
             for char in range(len(lines[line])):
                 width = len(lines[line])
-                if char == "@":
-                    robot = (line,char)
-                if char == "#":
-                    walls.append((line,char))
-                if char == "O":
-                    boxes.append((line,char))
 
+                if lines[line][char] == "@":
+                    robot = (line,char)
+                if lines[line][char] == "#":
+                    walls.append((line,char))
+                if lines[line][char] == "[":
+                    boxes[(line,char)]=(line,char+1)
+                if lines[line][char] == "]":
+                    boxes[(line,char)]=(line,char-1)
+    print(walls)
+    print(boxes)
     with open(moveInput, 'r') as file:
         lines = file.readlines()
         for line in lines:
@@ -32,11 +39,14 @@ def part_one(input, moveInput):
                         print("wall")
                     elif nextMove in boxes:
                         print("box")
-                        currBoxes=[]
+                        currBoxes=[nextMove,boxes.get(nextMove)]
                         pos = copy.deepcopy(nextMove)
-                        while pos in boxes:
-                            currBoxes.append(pos)
-                            pos = (pos[0]-1,pos[1])
+                        if checkNextBox(nextMove,boxes,walls,-1,0):
+                            robot = (robot[0]-1,robot[1])
+
+
+
+
                         if pos not in walls:
                             for box in currBoxes:
                                 index =boxes.index(box)
@@ -48,6 +58,7 @@ def part_one(input, moveInput):
 
                 elif char == ('v'):
                     nextMove = (robot[0]+1,robot[1])
+                    print(nextMove)
                     if nextMove in walls:
                         print("wall")
                     elif nextMove in boxes:
@@ -103,3 +114,7 @@ def part_one(input, moveInput):
                     else:
                         print("move")
                         robot = nextMove
+        print(boxes)
+        for box in boxes:
+            total += (box[0]*100) + box[1]
+        print(total)
